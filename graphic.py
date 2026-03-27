@@ -109,51 +109,70 @@ if "draft_code" not in st.session_state:
 
 def extract_mermaid(text):
     """
-    Extracts Mermaid code by capturing everything from the first 
-    'graph' or 'flowchart' keyword until the end of the code block.
+    Extrage codul Mermaid și aplică reguli de auto-corecție pentru 
+    sintaxa invalidă generată frecvent de modelele mici (1.5B).
     """
-    # 1. If the AI used backticks, take everything inside them
+    clean_code = ""
+
+    # 1. Extracție din blocuri de cod (backticks)
     if "```" in text:
         parts = text.split("```")
         for part in parts:
             p = part.strip()
+            # Eliminăm prefixul "mermaid" dacă există
             if p.lower().startswith("mermaid"):
                 p = p[7:].strip()
             if p.lower().startswith("graph") or p.lower().startswith("flowchart"):
-                return p
-
-    # 2. Find where the diagram starts
-    start_keywords = ["graph TD", "graph LR", "flowchart TD", "flowchart LR"]
-    start_pos = -1
-    for kw in start_keywords:
-        if kw in text:
-            start_pos = text.find(kw)
-            break
-            
-    if start_pos == -1:
-        return text.strip()
-
-    # 3. Get everything from the start keyword to the end of the text
-    # Then filter out any conversational "outro" text manually
-    lines = text[start_pos:].split('\n')
-    clean_lines = []
-    
-    # Symbols that almost always appear in Mermaid code lines
-    code_markers = ['-', '>', '[', '(', '{', '}', 'style', 'classDef', 'subgraph', 'end']
-    
-    for line in lines:
-        stripped = line.strip()
-        # If the line is empty or contains mermaid syntax, keep it
-        if not stripped or any(marker in stripped for marker in code_markers):
-            clean_lines.append(line)
-        else:
-            # If we hit a line with many words and NO mermaid markers, it's AI chatter.
-            # Stop collecting lines here.
-            if len(stripped.split()) > 6:
+                clean_code = p
                 break
-            clean_lines.append(line)
 
-    return "\n".join(clean_lines).strip()
+    # 2. Extracție bazată pe cuvinte cheie (dacă nu există backticks)
+    if not clean_code:
+        start_keywords = ["graph TD", "graph LR", "flowchart TD", "flowchart LR"]
+        start_pos = -1
+        for kw in start_keywords:
+            if kw in text:
+                start_pos = text.find(kw)
+                break
+        
+        if start_pos != -1:
+            lines = text[start_pos:].split('\n')
+            collected_lines = []
+            code_markers = ['-', '>', '[', '(', '{', '}', 'style', 'classDef', 'subgraph', 'end', '%%']
+            
+            for line in lines:
+                stripped = line.strip()
+                if not stripped or any(marker in stripped for marker in code_markers):
+                    collected_lines.append(line)
+                else:
+                    if len(stripped.split()) > 7: # Chat-ul AI-ului de final
+                        break
+                    collected_lines.append(line)
+            clean_code = "\n".join(collected_lines).strip()
+        else:
+            clean_code = text.strip()
+
+    # --- 3. AUTO-REPAIR LOGIC (Bonus Points Feature) ---
+    
+    # Corectăm săgețile invalide (cea mai comună eroare: -> în loc de -->)
+    # Folosim un loop pentru a prinde cazurile repetate
+    clean_code = clean_code.replace(" -> ", " --> ")
+    clean_code = clean_code.replace(" ->>", " --> ")
+    clean_code = clean_code.replace(" - > ", " --> ")
+    
+    # Schimbăm comentariile stil Python (#) în stil Mermaid (%%)
+    lines = clean_code.split('\n')
+    repaired_lines = []
+    for line in lines:
+        if line.strip().startswith("#"):
+            repaired_lines.append(line.replace("#", "%%", 1))
+        else:
+            # Forțăm textul negru dacă AI-ul a pus color:#fff
+            repaired_lines.append(line.replace("color:#fff", "color:#000"))
+    
+    clean_code = "\n".join(repaired_lines)
+
+    return clean_code
 
 def render_diagram(code: str):
 
