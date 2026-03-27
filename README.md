@@ -1,78 +1,38 @@
-# Natural-language-to-diagram
-A project for an lseg event that is supposed to turn natural language into diagrams that represent ai models
+# 📊 NeuroArchitect: AI-Driven Diagram Engine
+**Creat de: Surei Ștefan** | *Proiect dezvoltat pentru QuantChallenge 2026*
 
-📊 NeuroArchitect: De la Limbaj Natural la Diagramă
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-black?style=for-the-badge&logo=ollama&logoColor=white)
+![Mermaid](https://img.shields.io/badge/Mermaid-ff69b4?style=for-the-badge&logo=mermaid&logoColor=white)
 
-Creat de: Surei Ștefan (sau link-ul tău de GitHub)
+---
 
-    "Vizualizarea ideilor complexe nu ar trebui să fie o barieră, ci un reflex."
+## 🏠 1. Home: Prezentare Proiect
 
-NeuroArchitect este un instrument interactiv dezvoltat în cadrul QuantChallenge 2026, conceput să elimine efortul manual de a desena diagrame tehnice. Folosind puterea modelelor LLM locale (via Ollama) și flexibilitatea Mermaid.js, aplicația transformă descrierile textuale simple în arhitecturi vizuale profesionale, riguros structurate și estetic plăcute.
-✨ Caracteristici Principale
+**NeuroArchitect** este o soluție inovatoare care transformă limbajul natural în diagrame tehnice de înaltă precizie. Proiectul rezolvă problema documentației manuale cronofage, permițând arhitecților de sistem și dezvoltatorilor să genereze vizualizări profesionale prin simple descrieri textuale.
 
-    🤖 Generare Bazată pe AI: Scrie un prompt simplu (ex: "Un sistem bancar cu un gateway și un filtru de securitate") și urmărește cum AI-ul construiește logica în locul tău.
+### ✨ Caracteristici Principale
+* **🤖 AI Local (Privacy First):** Rulează integral pe modelul `qwen2.5-coder:1.5b` via Ollama. Datele tale nu părăsesc niciodată mașina locală.
+* **🎨 Enterprise Styling:** Culori predefinite pentru standarde industriale (inspirat de LSEG):
+    * 🟠 **Security:** Guardrails și Censors (#D99C3B).
+    * 🟢 **Logic:** Routere și Clasificatori (#34A853).
+    * 🔴 **Tools:** Servicii active și unelte (#BA3B3B).
+    * 🔵 **Data:** Baze de date și utilizatori (#4A629B).
+* **⚙️ Pipeline de Control:** Generare AI ➡️ Editare Live ➡️ Sintaxă Robustă ➡️ Randare Canvas.
 
-    🛠️ Pipeline în 4 Pași:
+---
 
-        AI Generator: Motorul de gândire (Qwen 2.5 Coder).
+## ⚙️ 2. Configurare Mediu și Instalare
 
-        Code Editor: Flexibilitate totală pentru ajustări manuale.
+Copiați și rulați următoarele comenzi în terminal pentru a configura și porni aplicația într-un singur flux:
 
-        Syntax View: Validare instantanee a codului Mermaid.
+```bash
+# Instalează modelul AI, clonează proiectul, instalează librăriile și pornește aplicația
+ollama pull qwen2.5-coder:1.5b
+git clone [https://github.com/stefansurei/neuroarchitect.git](https://github.com/stefansurei/neuroarchitect.git)
+cd neuroarchitect
+pip install streamlit ollama
+streamlit run graphic.py
 
-        Rendered Canvas: Export vizual cu auto-layout inteligent.
-
-    🎨 Stilizare Inteligentă (LSEG Inspired): Algoritmul aplică automat o paletă de culori profesională:
-
-        🟠 Security/Guardrails pentru siguranță.
-
-        🟢 Classifiers/Routers pentru decizii.
-
-        🔴 Action Tools pentru procesare.
-
-        🔵 Data/Users pentru fluxul informațional.
-
-    📐 Geometrie Dinamică: Noduri rotunjite, margini accentuate și săgeți colorate care urmăresc fluxul logic pentru o lizibilitate maximă.
-
-🚀 Tehnologii Utilizate
-
-    Python & Streamlit: Pentru o interfață web fluidă și reactivă.
-
-    Ollama (Qwen 2.5 Coder): Procesare LLM locală pentru confidențialitate și viteză.
-
-    Mermaid.js: Motorul de randare pentru diagrame vectoriale de înaltă calitate.
-
-    Regex & String Processing: Un extractor customizat care elimină "zgomotul" din răspunsurile AI pentru a livra cod pur.
-
-📖 Exemple de Utilizare
-
-Proiectul este versatil și poate interpreta:
-
-    Arhitecturi Cloud/AI (Node-uri de securitate, API Call-uri, Gateways).
-
-    Fluxuri de Decizie (Itinerarii de călătorie, algoritmi logici).
-
-    Arhitecturi Deep Learning (Structuri de Transformer, rețele neurale).
-
-    Diagrame de Relații (Family trees sau ierarhii organizaționale).
-
-⚙️ Instalare și Pornire
-
-    Asigură-te că ai Ollama instalat și modelul descărcat:
-    Bash
-
-    ollama pull qwen2.5-coder:1.5b
-
-    Instalează dependențele:
-    Bash
-
-    pip install streamlit ollama
-
-    Rulează aplicația:
-    Bash
-
-    streamlit run graphic.py
-
-👨‍💻 Contribuții
-
-Acest proiect a fost dezvoltat cu pasiune pentru arhitectura de sistem și AI. Dacă ai idei de îmbunătățire, deschide un Issue sau un Pull Request!
+Dezvoltat de Surei Stefan
