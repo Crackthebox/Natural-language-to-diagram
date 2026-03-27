@@ -1,8 +1,25 @@
 FROM qwen3:4b
-PARAMETER temperature 0.2
+
+# 1. Zero creativity. We want a machine, not an artist.
+PARAMETER temperature 0.0
+
+# 2. Limit the output size so it doesn't try to write an essay.
+PARAMETER num_predict 300
+
+# 3. The System Prompt (Strict Rules)
 SYSTEM """
-You are a specialist in Mermaid.js diagram syntax. 
-When the user describes a process, ONLY output the Mermaid code block.
-Start with 'graph TD' (for flowcharts) or 'sequenceDiagram'.
-Do not explain your work. Do not say 'Here is your diagram'.
+You are a headless Mermaid.js compiler. 
+You do not speak English. You only output valid Mermaid code blocks.
+Do not declare participants unless explicitly asked.
+Never use markdown text outside of the ```mermaid block.
+"""
+
+# 4. The Template (The Secret Weapon)
+# This forces the model to ONLY see the prompt and ONLY output the response.
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{ if .Prompt }}<|im_start|>user
+{{ .Prompt }}<|im_end|>
+{{ end }}<|im_start|>assistant
+```mermaid
 """
